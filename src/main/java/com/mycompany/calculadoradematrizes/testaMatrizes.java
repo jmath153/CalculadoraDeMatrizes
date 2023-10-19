@@ -37,7 +37,7 @@ public class testaMatrizes {
                 System.out.println("Informe a quantidade de colunas:");
                 int colunas = scan.nextInt();
 
-                int[][] matriz = new int[linhas][colunas];
+                float[][] matriz = new float[linhas][colunas];
                 
                if(opcaoGerador == "1"){
                    for(int i = 0; i < matriz.length ; i++){

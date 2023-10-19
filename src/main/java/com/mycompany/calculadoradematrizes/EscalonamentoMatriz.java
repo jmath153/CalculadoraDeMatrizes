@@ -80,7 +80,6 @@ public class EscalonamentoMatriz {
                     if(matriz[i][j] != pivoLinha) {
                         if (matriz[i][j] == 0) {
                             cont++;
-
                         }
                     } else {
                         break;

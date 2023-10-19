@@ -10,6 +10,6 @@ package com.mycompany.calculadoradematrizes;
  */
 public interface operacoes {
     public void exibirMatriz(float[][] matriz);
-    public T[][] gerarMatriz(int linhas, int colunas);
-    public T calcularDeterminante(int[][] matriz);
+    public float[][] gerarMatriz(int linhas, int colunas);
+    public float calcularDeterminante(float[][] matriz);
 }
