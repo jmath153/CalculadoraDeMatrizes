@@ -44,9 +44,7 @@ public class EscalonamentoMatriz {
                 if(i != linhaPivo){
                     float escalar = matriz[i][colunaPivo];
                     for(int j = 0;j<matriz[i].length;j++){
-                      //  System.out.println(matriz[i][j] +"= "+"("+ matriz[i][j]+"- ("+matriz[i][colunaPivo] + "*"+matriz[linhaPivo][j]+")");
                         matriz[i][j] = (matriz[i][j] - (escalar * matriz[linhaPivo][j]));
-
                     }
                 }
             }
@@ -59,10 +57,7 @@ public class EscalonamentoMatriz {
 
         float pivo = this.encontrarPivo(matriz, linha);
         for (int i = 0; i < matriz[linha].length; i++) {
-            System.out.println(matriz[linha][i] + "/" + pivo + "= ");
-
             matriz[linha][i] = (matriz[linha][i]/pivo);
-            System.out.println(matriz[linha][i]);
         }
         return matriz;
     }
@@ -75,7 +70,6 @@ public class EscalonamentoMatriz {
             for (int i = 0; i < matriz.length; i++) {
                 int cont = 0;
                 float pivoLinha = this.encontrarPivo(matriz,i);
-
                 for (int j = 0; j < matriz[i].length; j++) {
                     if(matriz[i][j] != pivoLinha) {
                         if (matriz[i][j] == 0) {
@@ -90,7 +84,6 @@ public class EscalonamentoMatriz {
             }
             trocas = 0;
             for(int k = 0; k < zerosLinhas.length - 1; k++) {
-
                 if(zerosLinhas[k][1] > zerosLinhas[k + 1][1]) {
                     matriz = this.permutarLinhas(matriz, k, k + 1);
                     trocas++;
@@ -117,7 +110,7 @@ public class EscalonamentoMatriz {
                     break;
                 }
             }
-            //Deixando pivô igual a 1
+
             if (pivo != 1) {
                 matriz = this.multiplicarPorEscalar(matriz,i);
 

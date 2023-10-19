@@ -58,6 +58,48 @@ public class SistemaMatriz implements operacoes {
         return 0;
             
     }
+
+    @Override
+    public float[][] escalonar(float[][] matriz) {
+
+        EscalonamentoMatriz escalonador = new EscalonamentoMatriz();
+
+        matriz = escalonador.ordenarLinhas(matriz);
+
+        for (int i = 0; i < matriz.length; i++) {
+
+            float pivo = escalonador.encontrarPivo(matriz, i);
+            int colunaPivo = 0;
+
+            for(int j =0; j < matriz[i].length; j++){
+                if(matriz[i][j] == pivo){
+                    colunaPivo = j;
+                    break;
+                }
+            }
+
+            if (pivo != 1) {
+                matriz = escalonador.multiplicarPorEscalar(matriz,i);
+
+            }
+
+            matriz = escalonador.zerarColuna(matriz,i,colunaPivo);
+
+        }
+
+        return escalonador.formatarValor(matriz);
+    }
+
+    @Override
+    public float[][] calcularInversa(float[][] matriz) {
+        InversaMatriz inversaCalc = new InversaMatriz();
+        float[][] matrizComIdentidade = inversaCalc.juntarMatrizComAIdentidade(matriz);
+        float[][] escalonada = escalonar(matrizComIdentidade);
+        float[][] inversa = inversaCalc.separarIdentidade(escalonada);
+
+        return inversa;
+    }
+
     public float[][] removerLinhasColunas(float[][] matriz, int coluna){
         float[][] removida = new float[matriz.length-1][matriz.length-1];
         for(int i = 1; i < matriz.length;i++){
@@ -75,4 +117,6 @@ public class SistemaMatriz implements operacoes {
         }
         return removida;
     }
+
+
 }

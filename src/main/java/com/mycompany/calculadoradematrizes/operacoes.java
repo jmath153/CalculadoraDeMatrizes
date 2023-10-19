@@ -9,7 +9,9 @@ package com.mycompany.calculadoradematrizes;
  * @author joaom
  */
 public interface operacoes {
-    public void exibirMatriz(float[][] matriz);
-    public float[][] gerarMatriz(int linhas, int colunas);
-    public float calcularDeterminante(float[][] matriz);
+     void exibirMatriz(float[][] matriz);
+     float[][] gerarMatriz(int linhas, int colunas);
+     float calcularDeterminante(float[][] matriz);
+     float[][] escalonar(float[][] matriz);
+     float[][] calcularInversa(float[][] matriz);
 }

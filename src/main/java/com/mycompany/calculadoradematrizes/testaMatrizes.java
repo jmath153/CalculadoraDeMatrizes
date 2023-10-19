@@ -26,7 +26,7 @@ public class testaMatrizes {
            
            String opcaoPrincipal = scan.nextLine();
            
-           if(opcaoPrincipal == "1"){
+           if(opcaoPrincipal.equals("1")){
                
                 System.out.println("[1] Inserir matriz\n[2] Gerar Matriz Aleatória\n[3]\n Voltar");
                 String opcaoGerador = scan.nextLine();
