@@ -60,6 +60,29 @@ public class SistemaMatriz implements operacoes {
     }
 
     @Override
+    public float[][] matrizTransposta(float[][] matriz) {
+        float[][] transposta = new float[matriz[0].length][matriz.length];
+
+        for(int i = 0; i < matriz.length;i++){
+            for(int j = 0; j < matriz[i].length; j++){
+                transposta[i][j] = matriz[j][i];
+            }
+        }
+        return transposta;
+    }
+
+    @Override
+    public float[][] matrizDeCofatores(float[][] matriz) {
+        float[][] matrizDeCof = new float[matriz.length][matriz.length];
+
+        for(int i = 0; i < matriz.length;i++){
+            for(int j = 0; j < matriz.length; j++){
+                matrizDeCof[i][j] = ((float) Math.pow(-1,((i+1)+(j+1)))) * calcularDeterminante(removerLinhasColunas());
+            }
+        }
+    }
+
+    @Override
     public float[][] escalonar(float[][] matriz) {
 
         EscalonamentoMatriz escalonador = new EscalonamentoMatriz();
@@ -100,18 +123,19 @@ public class SistemaMatriz implements operacoes {
         return inversa;
     }
 
-    public float[][] removerLinhasColunas(float[][] matriz, int coluna){
+    public float[][] removerLinhasColunas(float[][] matriz,int linha, int coluna){
         float[][] removida = new float[matriz.length-1][matriz.length-1];
-        for(int i = 1; i < matriz.length;i++){
-            for(int j = 0; j < matriz[i].length;j++){
-                if(j != coluna){
-                    if(j>coluna){
-                        removida[i-1][j-1] = matriz[i][j];
+
+        for(int i = 0; i < matriz.length;i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
+                if (i != linha) {
+                    if (j != coluna){
+                        if (j > coluna){
+                            removida[i - 1][j - 1] = matriz[i][j];
+                        } else {
+                            removida[i - 1][j] = matriz[i][j];
+                        }
                     }
-                    else{
-                        removida[i-1][j] = matriz[i][j];
-                    }
-                } else {
                 }
             }
         }

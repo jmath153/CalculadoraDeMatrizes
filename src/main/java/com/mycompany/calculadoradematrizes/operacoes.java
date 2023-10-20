@@ -12,6 +12,8 @@ public interface operacoes {
      void exibirMatriz(float[][] matriz);
      float[][] gerarMatriz(int linhas, int colunas);
      float calcularDeterminante(float[][] matriz);
+     float[][] matrizTransposta(float[][] matriz);
+     float[][] matrizDeCofatores(float[][] matriz);
      float[][] escalonar(float[][] matriz);
      float[][] calcularInversa(float[][] matriz);
 }

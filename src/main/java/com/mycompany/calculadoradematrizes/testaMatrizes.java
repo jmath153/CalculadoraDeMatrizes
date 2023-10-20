@@ -12,55 +12,75 @@ import java.util.Scanner;
  */
 public class testaMatrizes {
     public static void main(String[] args) {
-        
-        
-       boolean sair = false;
-       Scanner scan = new Scanner(System.in);
-       
-       SistemaMatriz sistema = new SistemaMatriz();
-       
-       while(!sair){
-           System.out.println("Calculadora de matrizes");
-           System.out.println("");
-           System.out.println("[1] Gerar matriz\n[2] Sair");
-           
-           String opcaoPrincipal = scan.nextLine();
-           
-           if(opcaoPrincipal.equals("1")){
-               
-                System.out.println("[1] Inserir matriz\n[2] Gerar Matriz Aleatória\n[3]\n Voltar");
-                String opcaoGerador = scan.nextLine();
 
-                System.out.println("Informe a quantidade de linhas:");
-                int linhas = scan.nextInt();
 
-                System.out.println("Informe a quantidade de colunas:");
-                int colunas = scan.nextInt();
+        boolean sair = false;
+        Scanner scan = new Scanner(System.in);
 
-                float[][] matriz = new float[linhas][colunas];
-                
-               if(opcaoGerador == "1"){
-                   for(int i = 0; i < matriz.length ; i++){
-                       for(int j = 0 ; j < matriz.length; j++){
-                           System.out.println("informe o elemento da "+i+"° Linha e "+j+"° coluna: ");
-                           matriz[i][j] = scan.nextInt();
-                       }
-                   }
-               }
-               if(opcaoGerador == "2"){
-                   
-                    matriz = sistema.gerarMatriz(linhas, colunas);    
-               }
-               sistema.exibirMatriz(matriz);
-               
-               System.out.println("[1] Exibir informações\n[2] Operações");
-               String menuManipular = scan.nextLine();
-               
-               if(menuManipular == "1"){
-                   System.out.println("1 Determinante da matriz: "+sistema.calcularDeterminante(matriz));
-                   System.out.println("2 ");
-               }
-           }
-       }
+        SistemaMatriz sistema = new SistemaMatriz();
+
+        while (!sair) {
+            System.out.println("Calculadora de matrizes");
+            System.out.println("");
+            System.out.println("[1] Selecionar matriz\n[2] Sair");
+
+            String opcaoPrincipal = scan.nextLine();
+
+            if (opcaoPrincipal.equals("1")) {
+
+                String opcaoGerador = "";
+
+                while (!opcaoGerador.equals("3")) {
+
+                    boolean temMatriz = false;
+
+                    System.out.println("[1] Inserir matriz\n[2] Gerar Matriz Aleatória\n[3] Voltar");
+                    opcaoGerador = scan.nextLine();
+                    float[][] matriz = null;
+
+                    if (opcaoGerador.equals("1")) {
+                        System.out.println("Informe a quantidade de linhas:");
+                        int linhas = scan.nextInt();
+
+                        System.out.println("Informe a quantidade de colunas:");
+                        int colunas = scan.nextInt();
+
+                        float[][] matrizInserida = new float[linhas][colunas];
+
+                        for (int i = 0; i < matrizInserida.length; i++) {
+                            for (int j = 0; j < matrizInserida.length; j++) {
+                                System.out.println("informe o elemento da " + i + "° Linha e " + j + "° coluna: ");
+                                matrizInserida[i][j] = scan.nextInt();
+                            }
+                        }
+                        matriz = matrizInserida;
+                        temMatriz = true;
+                    }
+                    if (opcaoGerador.equals("2")) {
+                        System.out.println("Informe a quantidade de linhas:");
+                        int linhas = scan.nextInt();
+
+                        System.out.println("Informe a quantidade de colunas:");
+                        int colunas = scan.nextInt();
+
+                        float[][] matrizGerada = sistema.gerarMatriz(linhas, colunas);
+                        matriz = matrizGerada;
+                        temMatriz = true;
+
+                    }
+
+                    if(temMatriz){
+                        sistema.exibirMatriz(matriz);
+                        System.out.println(" ");
+                        System.out.println("Selecione a operação:\n [1] Calcular determinante\n [2]");
+                    }
+
+                }
+
+            }
+            if(opcaoPrincipal.equals("2")){
+                sair = true;
+            }
+        }
     }
 }
