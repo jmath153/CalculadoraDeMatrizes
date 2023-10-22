@@ -134,7 +134,6 @@ public class testaMatrizes {
                                 case "5":
                                     System.out.println("Matriz escalonada: ");
                                     sistema.exibirMatriz(sistema.escalonar(matriz));
-                                    sistema.exibirMatriz(matriz);
                                     System.out.println();
                                     break;
                                 case "6":
