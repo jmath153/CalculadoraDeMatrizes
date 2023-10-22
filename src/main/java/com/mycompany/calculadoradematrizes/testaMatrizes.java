@@ -30,7 +30,6 @@ public class testaMatrizes {
     }
     public static void main(String[] args) {
 
-
         boolean sair = false;
         Scanner scan = new Scanner(System.in);
 
@@ -158,5 +157,8 @@ public class testaMatrizes {
                 sair = true;
             }
         }
+
+
+
     }
 }

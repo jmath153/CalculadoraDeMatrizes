@@ -92,7 +92,6 @@ public class EscalonamentoMatriz {
                 }
             }
         } while (trocas != 0);
-
         return ordenada;
     }
 

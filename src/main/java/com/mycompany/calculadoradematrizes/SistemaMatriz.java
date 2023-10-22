@@ -108,7 +108,13 @@ public class SistemaMatriz implements operacoes {
     public float[][] escalonar(float[][] matriz) {
 
         EscalonamentoMatriz escalonador = new EscalonamentoMatriz();
-        float[][] matrizEscalonada = matriz;
+
+        float[][] matrizEscalonada = new float[matriz.length][matriz[0].length];
+        for(int i=0;i< matriz.length;i++){
+            for(int j=0;j< matriz[i].length;j++){
+                matrizEscalonada[i][j] = matriz[i][j];
+            }
+        }
 
         matrizEscalonada = escalonador.ordenarLinhas(matrizEscalonada);
 
@@ -127,10 +133,9 @@ public class SistemaMatriz implements operacoes {
                 matrizEscalonada = escalonador.multiplicarPorEscalar(matrizEscalonada,i);
             }
             matrizEscalonada = escalonador.zerarColuna(matrizEscalonada,i,colunaPivo);
-
         }
-
         return escalonador.formatarValor(matrizEscalonada);
+
     }
 
     @Override
