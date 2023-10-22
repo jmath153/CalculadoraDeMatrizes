@@ -4,6 +4,11 @@
  */
 package com.mycompany.calculadoradematrizes;
 
+import com.mycompany.calculadoradematrizes.exceptions.InversaNaoExisteException;
+import com.mycompany.calculadoradematrizes.exceptions.MatrizNaoEQuadradaException;
+
+import java.util.Random;
+
 /**
  *
  * @author joaom
@@ -23,17 +28,22 @@ public class SistemaMatriz implements operacoes {
     @Override
     public float[][] gerarMatriz(int linhas, int colunas) {
         float[][] matriz = new float[linhas][colunas];
-        
+        Random ran = new Random();
+
         for(int i = 0; i<matriz.length;i++){
             for(int j = 0; j<matriz[i].length;j++){
-               matriz[i][j] = i+j;
+               matriz[i][j] = (float) ran.nextInt(10);
             }
         }
         return matriz;
     }
 
     @Override
-    public float calcularDeterminante(float[][] matriz) {
+    public float calcularDeterminante(float[][] matriz) throws MatrizNaoEQuadradaException {
+
+        if(matriz.length != matriz[0].length){
+            throw new MatrizNaoEQuadradaException("Só é possível calcular o determinante para matrizes quadradas");
+        }
         if(matriz.length == 1 ){
             return matriz[0][0];
         } else if(matriz.length == 2){
@@ -49,7 +59,7 @@ public class SistemaMatriz implements operacoes {
         } else if(matriz.length >= 4){
             float det = 0;
             for(int i = 0; i < matriz.length;i++){
-              det += (matriz[0][i]) * ((int) Math.pow(-1,1+(i+1))) * (calcularDeterminante(removerLinhasColunas(matriz, i)));
+              det += (matriz[0][i]) * ((int) Math.pow(-1,1+(i+1))) * (calcularDeterminante(removerLinhasColunas(matriz,0,i)));
               
             }
             return det;
@@ -72,50 +82,69 @@ public class SistemaMatriz implements operacoes {
     }
 
     @Override
-    public float[][] matrizDeCofatores(float[][] matriz) {
-        float[][] matrizDeCof = new float[matriz.length][matriz.length];
+    public float[][] matrizDeCofatores(float[][] matriz) throws MatrizNaoEQuadradaException {
+        if(matriz.length != matriz[0].length){
+            throw new MatrizNaoEQuadradaException("Só é possível calcular a matriz de cofatores para matrizes quadradas");
+        }
 
+        float[][] matrizDeCof = new float[matriz.length][matriz.length];
         for(int i = 0; i < matriz.length;i++){
             for(int j = 0; j < matriz.length; j++){
-                matrizDeCof[i][j] = ((float) Math.pow(-1,((i+1)+(j+1)))) * calcularDeterminante(removerLinhasColunas());
+                matrizDeCof[i][j] = ((float) Math.pow(-1,((i+1)+(j+1)))) * calcularDeterminante(removerLinhasColunas(matriz,i,j));
             }
         }
+        return matrizDeCof;
+    }
+
+    @Override
+    public float[][] matrizAdjunta(float[][] matriz) throws MatrizNaoEQuadradaException {
+        if(matriz.length != matriz[0].length){
+            throw new MatrizNaoEQuadradaException("Só é possível calcular a matriz adjunta para matrizes quadradas");
+        }
+        return (matrizTransposta(matrizDeCofatores(matriz)));
     }
 
     @Override
     public float[][] escalonar(float[][] matriz) {
 
         EscalonamentoMatriz escalonador = new EscalonamentoMatriz();
+        float[][] matrizEscalonada = matriz;
 
-        matriz = escalonador.ordenarLinhas(matriz);
+        matrizEscalonada = escalonador.ordenarLinhas(matrizEscalonada);
 
-        for (int i = 0; i < matriz.length; i++) {
+        for (int i = 0; i < matrizEscalonada.length; i++) {
 
-            float pivo = escalonador.encontrarPivo(matriz, i);
+            float pivo = escalonador.encontrarPivo(matrizEscalonada, i);
             int colunaPivo = 0;
 
-            for(int j =0; j < matriz[i].length; j++){
-                if(matriz[i][j] == pivo){
+            for(int j =0; j < matrizEscalonada[i].length; j++){
+                if(matrizEscalonada[i][j] == pivo){
                     colunaPivo = j;
                     break;
                 }
             }
-
             if (pivo != 1) {
-                matriz = escalonador.multiplicarPorEscalar(matriz,i);
-
+                matrizEscalonada = escalonador.multiplicarPorEscalar(matrizEscalonada,i);
             }
-
-            matriz = escalonador.zerarColuna(matriz,i,colunaPivo);
+            matrizEscalonada = escalonador.zerarColuna(matrizEscalonada,i,colunaPivo);
 
         }
 
-        return escalonador.formatarValor(matriz);
+        return escalonador.formatarValor(matrizEscalonada);
     }
 
     @Override
-    public float[][] calcularInversa(float[][] matriz) {
+    public float[][] calcularInversa(float[][] matriz) throws InversaNaoExisteException {
+
+        try {
+            if(calcularDeterminante(matriz) == 0){
+                throw new InversaNaoExisteException("Esta matriz não possuí inversa");
+            }
+        } catch (MatrizNaoEQuadradaException e) {
+            throw new InversaNaoExisteException("A inversa existe apenas para matrizes quadradas");
+        }
         InversaMatriz inversaCalc = new InversaMatriz();
+
         float[][] matrizComIdentidade = inversaCalc.juntarMatrizComAIdentidade(matriz);
         float[][] escalonada = escalonar(matrizComIdentidade);
         float[][] inversa = inversaCalc.separarIdentidade(escalonada);
@@ -130,11 +159,22 @@ public class SistemaMatriz implements operacoes {
             for (int j = 0; j < matriz[i].length; j++) {
                 if (i != linha) {
                     if (j != coluna){
-                        if (j > coluna){
-                            removida[i - 1][j - 1] = matriz[i][j];
-                        } else {
-                            removida[i - 1][j] = matriz[i][j];
+                        if(i > linha){
+                            if(j > coluna){
+                                removida[i - 1][j - 1] = matriz[i][j];
+                            }
+                            if(j < coluna){
+                                removida[i-1][j] = matriz[i][j];
+                            }
                         }
+                       if( i < linha){
+                           if(j > coluna){
+                               removida[i][j - 1] = matriz[i][j];
+                           }
+                           if(j < coluna){
+                               removida[i][j] = matriz[i][j];
+                           }
+                       }
                     }
                 }
             }

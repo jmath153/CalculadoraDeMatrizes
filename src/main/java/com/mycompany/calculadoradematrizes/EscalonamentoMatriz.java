@@ -14,18 +14,16 @@ import java.text.DecimalFormat;
 public class EscalonamentoMatriz {
 
     public float[][] permutarLinhas(float[][] matriz, int linha1, int linha2) {
-        SistemaMatriz sis = new SistemaMatriz();
 
+        float[][] matrizPermutada = matriz;
         float temp = 0;
-        for (int j = 0; j < matriz[0].length; j++) {
-            temp = matriz[linha1][j];
-            matriz[linha1][j] = matriz[linha2][j];
-            matriz[linha2][j] = temp;
+
+        for (int j = 0; j < matrizPermutada[0].length; j++) {
+            temp = matrizPermutada[linha1][j];
+            matrizPermutada[linha1][j] = matrizPermutada[linha2][j];
+            matrizPermutada[linha2][j] = temp;
         }
-        System.out.println("Linhas permutadas");
-        sis.exibirMatriz(matriz);
-        System.out.println();
-        return matriz;
+        return matrizPermutada;
     }
 
     public float encontrarPivo(float[][] matriz, int linha) {
@@ -38,41 +36,44 @@ public class EscalonamentoMatriz {
     }
 
     public float[][] zerarColuna(float[][] matriz, int linhaPivo, int colunaPivo) {
+        float[][] colunaZerada = matriz;
 
-        for(int i = 0; i < matriz.length; i++) {
-            if(matriz[i][colunaPivo] != 0){
+        for(int i = 0; i < colunaZerada.length; i++) {
+            if(colunaZerada[i][colunaPivo] != 0){
                 if(i != linhaPivo){
-                    float escalar = matriz[i][colunaPivo];
-                    for(int j = 0;j<matriz[i].length;j++){
-                        matriz[i][j] = (matriz[i][j] - (escalar * matriz[linhaPivo][j]));
+                    float escalar = colunaZerada[i][colunaPivo];
+                    for(int j = 0;j<colunaZerada[i].length;j++){
+                        colunaZerada[i][j] = (colunaZerada[i][j] - (escalar * colunaZerada[linhaPivo][j]));
                     }
                 }
             }
                                 
         }
-        return matriz;
+        return colunaZerada;
     }
 
     public float[][] multiplicarPorEscalar(float[][] matriz, int linha) {
+        float[][] multiplicadaPorEscalar = matriz;
 
-        float pivo = this.encontrarPivo(matriz, linha);
-        for (int i = 0; i < matriz[linha].length; i++) {
-            matriz[linha][i] = (matriz[linha][i]/pivo);
+        float pivo = this.encontrarPivo(multiplicadaPorEscalar, linha);
+        for (int i = 0; i < multiplicadaPorEscalar[linha].length; i++) {
+            multiplicadaPorEscalar[linha][i] = (multiplicadaPorEscalar[linha][i]/pivo);
         }
-        return matriz;
+        return multiplicadaPorEscalar;
     }
 
     public float[][] ordenarLinhas(float[][] matriz) {
+        float [][] ordenada = matriz;
         int[][] zerosLinhas = new int[matriz.length][2];
         int trocas;
 
         do {
-            for (int i = 0; i < matriz.length; i++) {
+            for (int i = 0; i < ordenada.length; i++) {
                 int cont = 0;
-                float pivoLinha = this.encontrarPivo(matriz,i);
-                for (int j = 0; j < matriz[i].length; j++) {
-                    if(matriz[i][j] != pivoLinha) {
-                        if (matriz[i][j] == 0) {
+                float pivoLinha = this.encontrarPivo(ordenada,i);
+                for (int j = 0; j < ordenada[i].length; j++) {
+                    if(ordenada[i][j] != pivoLinha) {
+                        if (ordenada[i][j] == 0) {
                             cont++;
                         }
                     } else {
@@ -85,44 +86,16 @@ public class EscalonamentoMatriz {
             trocas = 0;
             for(int k = 0; k < zerosLinhas.length - 1; k++) {
                 if(zerosLinhas[k][1] > zerosLinhas[k + 1][1]) {
-                    matriz = this.permutarLinhas(matriz, k, k + 1);
+                    ordenada = this.permutarLinhas(ordenada, k, k + 1);
                     trocas++;
 
                 }
             }
         } while (trocas != 0);
 
-        return matriz;
+        return ordenada;
     }
 
-    public float[][] escalonar(float[][] matriz) {
-        SistemaMatriz sis = new SistemaMatriz();
-        matriz = this.ordenarLinhas(matriz);
-
-        for (int i = 0; i < matriz.length; i++) {
-
-            float pivo = this.encontrarPivo(matriz, i);
-            int colunaPivo = 0;
-
-            for(int j =0; j < matriz[i].length; j++){
-                if(matriz[i][j] == pivo){
-                    colunaPivo = j;
-                    break;
-                }
-            }
-
-            if (pivo != 1) {
-                matriz = this.multiplicarPorEscalar(matriz,i);
-
-            }
-            
-            matriz = this.zerarColuna(matriz,i,colunaPivo);
-            sis.exibirMatriz(matriz);
-            System.out.println();
-        }
-
-        return formatarValor(matriz);
-    }
    public float[][] formatarValor(float[][] matriz){
         float[][] novaMatriz = new float[matriz.length][matriz[0].length];
         DecimalFormat formato = new DecimalFormat("#.##");

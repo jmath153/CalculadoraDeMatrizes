@@ -4,6 +4,9 @@
  */
 package com.mycompany.calculadoradematrizes;
 
+import com.mycompany.calculadoradematrizes.exceptions.InversaNaoExisteException;
+import com.mycompany.calculadoradematrizes.exceptions.MatrizNaoEQuadradaException;
+
 import java.util.Scanner;
 
 /**
@@ -11,6 +14,20 @@ import java.util.Scanner;
  * @author joaom
  */
 public class testaMatrizes {
+
+    public static void clearConsole(){
+        try {
+            final String os = System.getProperty("os.name");
+
+            if(os.contains("Windows")){
+                Runtime.getRuntime().exec("cls");
+            } else {
+                Runtime.getRuntime().exec("clear");
+            }
+        } catch (final Exception e){
+
+        }
+    }
     public static void main(String[] args) {
 
 
@@ -25,7 +42,6 @@ public class testaMatrizes {
             System.out.println("[1] Selecionar matriz\n[2] Sair");
 
             String opcaoPrincipal = scan.nextLine();
-
             if (opcaoPrincipal.equals("1")) {
 
                 String opcaoGerador = "";
@@ -69,10 +85,71 @@ public class testaMatrizes {
 
                     }
 
-                    if(temMatriz){
-                        sistema.exibirMatriz(matriz);
-                        System.out.println(" ");
-                        System.out.println("Selecione a operação:\n [1] Calcular determinante\n [2]");
+                    if(temMatriz) {
+                        String menuOperacoes = scan.nextLine();
+
+                        while (!menuOperacoes.equals("7")) {
+                            System.out.println("Matriz original: ");
+                            sistema.exibirMatriz(matriz);
+
+                            System.out.println(" ");
+                            System.out.println("Selecione a operação:\n [1] Calcular determinante\n [2] Calcular matriz transposta\n" +
+                                    " [3] Calcular matriz de cofatores\n [4] Calcular matriz adjunta\n [5] Escalonar matriz\n [6] Calcular matriz inversa\n [7] Voltar");
+
+                            menuOperacoes = scan.nextLine();
+
+                            switch (menuOperacoes) {
+                                case "1":
+                                    try {
+                                        System.out.println("Determinante da matriz: ");
+                                        System.out.println(sistema.calcularDeterminante(matriz));
+                                    } catch (MatrizNaoEQuadradaException e) {
+                                        System.out.println(e.getMessage());
+                                    }
+                                    break;
+                                case "2":
+                                    System.out.println("Matriz transposta: ");
+                                    sistema.exibirMatriz(sistema.matrizTransposta(matriz));
+                                    System.out.println();
+                                    break;
+                                case "3":
+                                    try {
+                                        System.out.println("Matriz de cofatores: ");
+                                        sistema.exibirMatriz(sistema.matrizDeCofatores(matriz));
+                                        System.out.println();
+                                    } catch (MatrizNaoEQuadradaException e) {
+                                        System.out.println(e.getMessage());
+                                    }
+                                    break;
+                                case "4":
+                                    try {
+                                        System.out.println("Matriz adjunta: ");
+                                        sistema.exibirMatriz(sistema.matrizAdjunta(matriz));
+                                        System.out.println();
+                                    } catch (MatrizNaoEQuadradaException e) {
+                                        System.out.println(e.getMessage());
+                                    }
+                                    break;
+
+                                case "5":
+                                    System.out.println("Matriz escalonada: ");
+                                    sistema.exibirMatriz(sistema.escalonar(matriz));
+                                    sistema.exibirMatriz(matriz);
+                                    System.out.println();
+                                    break;
+                                case "6":
+                                    try {
+                                        System.out.println("Matriz inversa: ");
+                                        sistema.exibirMatriz(sistema.calcularInversa(matriz));
+                                        System.out.println();
+                                    } catch (InversaNaoExisteException e) {
+                                        System.out.println(e.getMessage());
+                                    }
+                                    break;
+                                default:
+                                    System.out.println("Informe uma opção válida");
+                            }
+                        }
                     }
 
                 }

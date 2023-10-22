@@ -4,6 +4,9 @@
  */
 package com.mycompany.calculadoradematrizes;
 
+import com.mycompany.calculadoradematrizes.exceptions.InversaNaoExisteException;
+import com.mycompany.calculadoradematrizes.exceptions.MatrizNaoEQuadradaException;
+
 /**
  *
  * @author joaom
@@ -11,9 +14,11 @@ package com.mycompany.calculadoradematrizes;
 public interface operacoes {
      void exibirMatriz(float[][] matriz);
      float[][] gerarMatriz(int linhas, int colunas);
-     float calcularDeterminante(float[][] matriz);
+     float calcularDeterminante(float[][] matriz) throws MatrizNaoEQuadradaException;
      float[][] matrizTransposta(float[][] matriz);
-     float[][] matrizDeCofatores(float[][] matriz);
+     float[][] matrizDeCofatores(float[][] matriz) throws MatrizNaoEQuadradaException;
+     float[][] matrizAdjunta(float[][] matriz) throws MatrizNaoEQuadradaException;
      float[][] escalonar(float[][] matriz);
-     float[][] calcularInversa(float[][] matriz);
+     float[][] calcularInversa(float[][] matriz) throws InversaNaoExisteException;
+
 }
